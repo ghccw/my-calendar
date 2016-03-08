@@ -1,0 +1,17 @@
+{
+  "name": "Kingwell",
+  "description": "Example project to demonstrate Grunt.",
+  "version": "0.1.0",
+  "private": true,
+  "author": {
+    "name": "kingwell",
+    "email": "test@test.com"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.0",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-contrib-concat": "~0.4.0"
+  }
+}

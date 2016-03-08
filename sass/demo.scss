@@ -1,0 +1,81 @@
+@import 'compass/reset';
+
+html,
+body {
+	font-size: 12px;
+}
+
+.body {
+	font-family: Arial;
+	width: 50%;
+	margin: 20px auto;
+	padding: 20px;
+	border: 1px solid #ccc;
+	background-color: #fafafa;
+	border-radius: 5px;
+	font-size: 12px;
+
+	h1 {
+		text-align: center;
+		font-size: 36px;
+		font-weight: bold;
+		margin: 10px;
+	}
+
+	h2 {
+		font-size: 16px;
+		font-weight: bold;
+		font-size: 14px;
+		border-bottom: 1px solid #ccc;
+		padding: 10px 0;
+		margin: 5px 0px;
+	}
+
+}
+
+pre {
+	margin: 15px 0;
+	border: 1px solid #ccc;
+	padding: 20px;
+	background-color: #f2f2f2;
+	border-radius: 5px;
+	line-height: 1.5;
+	font-family: 'courier new';
+}
+
+.calendar-input {
+	border: 1px solid #ccc;
+	height: 25px;
+	line-height: 25px;
+	padding: 0 5px;
+	margin: 20px;
+	width: 150px;
+	border-radius: 3px;
+	background-color: #fea;
+}
+
+.calendar-ui {
+	&,
+	.calendar-year-box,
+	.calendar-month-box,
+	.calendar-date-box {
+		border-color: #666;
+	}
+
+	.calendar-year-header,
+	.calendar-month-header,
+	.calendar-date-header {
+		background-color: #333;
+		color: #fff;
+	}
+
+	tbody .calendar-this-year,
+	tbody .calendar-this-year:hover,
+	tbody .calendar-this-month,
+	tbody .calendar-this-month:hover,
+	tbody .calendar-today,
+	tbody .calendar-today:hover {
+		background-color: #333;
+	}
+
+}

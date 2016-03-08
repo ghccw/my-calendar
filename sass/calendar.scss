@@ -1,0 +1,196 @@
+@import 'mixin';
+
+.fl {
+	@include float(left);
+}
+
+.fr {
+	@include float(right);
+}
+
+.no-select {
+	@include userSelect;
+}
+
+.clearfix {
+	@include clearfix;
+}
+
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.calendar-box {
+	$color: #F6F9FE #DDEAFD #F7AA1C #333;
+	$borderColor: nth($color, 2);
+	$selectColor: nth($color, 3);
+	font-family: 'Microsoft YaHei';
+	border: 1px solid $borderColor;
+	border-right: none;
+	background-color: #fff;
+	position: absolute;
+	font-size: 12px;
+	color: nth($color, 4);
+	@extend .no-select;
+	@extend .clearfix;
+
+	td,
+	th {
+		text-align: center;
+		vertical-align: middle;
+	}
+
+	thead {
+		td,
+		th {
+			background-color: nth($color, 1);
+			@extend .no-select;
+		}
+
+	}
+
+	table {
+		border-spacing: 0;
+		border-collapse: collapse;
+	}
+
+	tbody {
+		.calendar-current {
+			color: #333;
+		}
+
+		.calendar-weekend {
+			color: #f00;
+		}
+
+		.calendar-non-current {
+			color: blue;
+		}
+
+		.calendar-enabled {
+			@extend .cursor-pointer;
+			@extend .no-select;
+
+			&:hover {
+				background-color: #eee;
+			}
+
+		}
+
+		.calendar-this-year,
+		.calendar-this-month,
+		.calendar-today {
+			&,
+			&:hover {
+				background-color: $selectColor;
+				color: #fff;
+			}
+
+		}
+
+		.calendar-disabled {
+			cursor: default;
+			background-color: #fff;
+			color: #ccc;
+			@extend .no-select;
+		}
+
+	}
+
+	.calendar-year-prev,
+	.calendar-year-next {
+		@extend .no-select;
+		@extend .cursor-pointer;
+		margin: 0 5px;
+
+		span {
+			display: inline-block;
+			vertical-align: middle;
+			text-align: center;
+			font-size: 18px;
+			font-weight: bold;
+			color: #999;
+
+			&:hover {
+				color: $selectColor;
+			}
+
+		}
+
+	}
+
+	.calendar-year-page {
+		@extend .clearfix;
+	}
+
+	.calendar-year-prev {
+		@extend .fl;
+
+		span {
+			//@include arrow(left, 10px, $selectColor);
+		}
+
+	}
+
+	.calendar-year-next {
+		@extend .fr;
+		//@include arrow(right, 10px, $selectColor);
+	}
+
+	//header
+	.calendar-year-header,
+	.calendar-month-header,
+	.calendar-date-header {
+		text-align: center;
+		background-color: nth($color, 1);
+		padding: 10px;
+		font-size: 14px;
+		font-weight: bold;
+	}
+
+	.calendar-year-box,
+	.calendar-month-box,
+	.calendar-date-box {
+		zoom: 1;
+		_width: 150px;
+		float: left;
+		border-right: 1px solid $borderColor;
+		height: 250px;
+		@extend .clearfix;
+	}
+
+	//Box
+	.calendar-year-table-box {
+		margin: 15px 15px;
+	}
+
+	.calendar-month-table-box {
+		margin: 15px 15px;
+	}
+
+	.calendar-date-table-box {
+		margin: 16px 15px;
+	}
+
+	.calendar-year-box {
+		td {
+			padding: 7px 8px;
+		}
+
+	}
+
+	.calendar-month-box {
+		td {
+			padding: 7px 8px;
+		}
+
+	}
+
+	.calendar-date-box {
+		td {
+			padding: 7px 8px;
+		}
+
+	}
+
+}

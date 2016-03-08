@@ -1,0 +1,147 @@
+.fl, .calendar-box .calendar-year-prev {
+  float: left;
+  _display: inline;
+}
+
+.fr, .calendar-box .calendar-year-next {
+  float: right;
+  _display: inline;
+}
+
+.no-select, .calendar-box, .calendar-box thead td,
+.calendar-box thead th, .calendar-box tbody .calendar-enabled, .calendar-box tbody .calendar-disabled, .calendar-box .calendar-year-prev,
+.calendar-box .calendar-year-next {
+  -moz-user-select: none;
+  /* firefox */
+  -webkit-user-select: none;
+  /* webkit */
+  -ms-user-select: none;
+  /* IE10 */
+  -khtml-user-select: none;
+  /* old */
+  user-select: none;
+}
+
+.clearfix:before, .calendar-box:before, .calendar-box .calendar-year-page:before, .calendar-box .calendar-year-box:before,
+.calendar-box .calendar-month-box:before,
+.calendar-box .calendar-date-box:before, .clearfix:after, .calendar-box:after, .calendar-box .calendar-year-page:after, .calendar-box .calendar-year-box:after,
+.calendar-box .calendar-month-box:after,
+.calendar-box .calendar-date-box:after {
+  clear: both;
+  content: '.';
+  display: block;
+  height: 0;
+  line-height: 0;
+  overflow: hidden;
+}
+.clearfix, .calendar-box, .calendar-box .calendar-year-page, .calendar-box .calendar-year-box,
+.calendar-box .calendar-month-box,
+.calendar-box .calendar-date-box {
+  zoom: 1;
+}
+
+.cursor-pointer, .calendar-box tbody .calendar-enabled, .calendar-box .calendar-year-prev,
+.calendar-box .calendar-year-next {
+  cursor: pointer;
+}
+
+.calendar-box {
+  font-family: 'Microsoft YaHei';
+  border: 1px solid #DDEAFD;
+  border-right: none;
+  background-color: #fff;
+  position: absolute;
+  font-size: 12px;
+  color: #333;
+}
+.calendar-box td,
+.calendar-box th {
+  text-align: center;
+  vertical-align: middle;
+}
+.calendar-box thead td,
+.calendar-box thead th {
+  background-color: #F6F9FE;
+}
+.calendar-box table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+.calendar-box tbody .calendar-current {
+  color: #333;
+}
+.calendar-box tbody .calendar-weekend {
+  color: #f00;
+}
+.calendar-box tbody .calendar-non-current {
+  color: blue;
+}
+.calendar-box tbody .calendar-enabled:hover {
+  background-color: #eee;
+}
+.calendar-box tbody .calendar-this-year, .calendar-box tbody .calendar-this-year:hover,
+.calendar-box tbody .calendar-this-month,
+.calendar-box tbody .calendar-this-month:hover,
+.calendar-box tbody .calendar-today,
+.calendar-box tbody .calendar-today:hover {
+  background-color: #F7AA1C;
+  color: #fff;
+}
+.calendar-box tbody .calendar-disabled {
+  cursor: default;
+  background-color: #fff;
+  color: #ccc;
+}
+.calendar-box .calendar-year-prev,
+.calendar-box .calendar-year-next {
+  margin: 0 5px;
+}
+.calendar-box .calendar-year-prev span,
+.calendar-box .calendar-year-next span {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #999;
+}
+.calendar-box .calendar-year-prev span:hover,
+.calendar-box .calendar-year-next span:hover {
+  color: #F7AA1C;
+}
+.calendar-box .calendar-year-header,
+.calendar-box .calendar-month-header,
+.calendar-box .calendar-date-header {
+  text-align: center;
+  background-color: #F6F9FE;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+.calendar-box .calendar-year-box,
+.calendar-box .calendar-month-box,
+.calendar-box .calendar-date-box {
+  zoom: 1;
+  _width: 150px;
+  float: left;
+  border-right: 1px solid #DDEAFD;
+  height: 250px;
+}
+.calendar-box .calendar-year-table-box {
+  margin: 15px 15px;
+}
+.calendar-box .calendar-month-table-box {
+  margin: 15px 15px;
+}
+.calendar-box .calendar-date-table-box {
+  margin: 16px 15px;
+}
+.calendar-box .calendar-year-box td {
+  padding: 7px 8px;
+}
+.calendar-box .calendar-month-box td {
+  padding: 7px 8px;
+}
+.calendar-box .calendar-date-box td {
+  padding: 7px 8px;
+}
