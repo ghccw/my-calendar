@@ -70,7 +70,7 @@ module.exports = function(grunt) {
 				}]
 			},
 			options: {
-				banner: '/*MyCalendar V 1.0.0<%=grunt.template.today("yyyy-mm-dd hh:mm:ss") %>*/\n',
+				banner: '/*\n  Name:MyCalendar V 1.0.0 \n  Date:<%=grunt.template.today("yyyy-mm-dd hh:mm:ss") %>\n  Github:https://github.com/lengjh/my-calendar\n*/\n\n',
 				compress: false,
 				//beautify: true,
 				mangle: false,
@@ -109,7 +109,7 @@ module.exports = function(grunt) {
 		concat: {
 			foo: {
 				files: {
-					'dest/my-calendar.js': ['src/kingwell.js','src/calendar.js']
+					'dest/my-calendar.js': ['src/kingwell.js', 'src/calendar.js']
 				}
 			}
 			// dist: {
