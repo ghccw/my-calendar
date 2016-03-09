@@ -72,7 +72,6 @@
 		},
 		events: function() {
 			var _this = this;
-
 			_this.el.onfocus = function() {
 				_this.open();
 			};
@@ -91,9 +90,7 @@
 				_this.editStatus = false;
 				_this.el.focus();
 			};
-			_this.box.onclick = function() {
-				//_this.el.focus();
-			};
+			_this.box.onclick = function() {};
 			_this.yearPrev.onclick = function() {
 				_this.yearNum -= 10;
 				_this.updateYear({
@@ -122,13 +119,11 @@
 				date = this.getNewDate(this.Y, this.M, this.D),
 				dateString = _this.getCurrentDate(date);
 			try {
-				if (_this.isElement(_this.el) && args.type === 'date') {
-					_this.el.value = _this.getCurrentDate(date);
-					_this.text(_this.el, dateString);
-					_this.editStatus = false;
-					_this.callback.call(_this, dateString, args);
-					_this.el.blur();
-				}
+
+				_this.el.value = dateString;
+				_this.text(_this.el, dateString);
+				_this.editStatus = false;
+				_this.callback.call(_this, dateString, args);
 			} catch (e) {}
 			if (args.type === 'date') {
 				_this.close();
@@ -137,9 +132,7 @@
 		log: function() {
 			try {
 				console.log.apply(console, arguments);
-			} catch (e) {
-
-			}
+			} catch (e) {}
 			return this;
 		},
 		__createYear: function() {
@@ -177,7 +170,6 @@
 			});
 			_this.append(_this.yearThead, _this.yearTable);
 			_this.append(_this.yearTbody, _this.yearTable);
-			_this.updateYear();
 			_this.append(_this.yearHeader, _this.yearBox);
 			_this.append(_this.yearTable, _this.yearTableBox);
 			_this.append(_this.yearTableBox, _this.yearBox);
@@ -211,7 +203,6 @@
 			_this.append(_this.monthTable, _this.monthTableBox);
 			_this.append(_this.monthTableBox, _this.monthBox);
 			_this.append(_this.monthBox, _this.box);
-			_this.updateMonth();
 		},
 		__createDate: function() {
 			var _this = this;
@@ -244,37 +235,35 @@
 			_this.append(_this.dateTable, _this.dateTableBox);
 			_this.append(_this.dateTableBox, _this.dateBox);
 			_this.append(_this.dateBox, _this.box);
-			_this.updateDate();
 		},
 		create: function() {
-			this.lock = true;
 			this.__createYear();
 			this.__createMonth();
 			this.__createDate();
 		},
-		createElements: function(context, attr) {
-			var _this = this,
-				attrs = attr || [];
-			for (var e = 0; e < attrs.length; e++) {
-				for (var key in attrs[e]) {
-					context[key] = _this.createElement(attrs[e][key][0], attrs[e][key][1]);
-				}
-			}
-			return context;
+		update: function() {
+			this.updateYear();
+			this.updateMonth();
+			this.updateDate();
 		},
 		open: function() {
-			this.append(this.box);
-			this.initDate();
-			this.setPostion();
-			this.setValue();
-			this.dateError = this.getDateStatus();
-			this.yearNum = 0;
-			if (!this.dateError) {
-				this.error.call(this, '最小日期不能大于最大日期');
+			if (!this.lock) {
+				this.lock = true;
+				this.update();
+				this.append(this.box);
+				this.initDate();
+				this.setPostion();
+				this.setValue();
+				this.dateError = this.getDateStatus();
+				this.yearNum = 0;
+				if (!this.dateError) {
+					this.error.call(this, '最小日期不能大于最大日期');
+				}
 			}
 		},
 		close: function() {
 			var _this = this;
+			_this.lock = false;
 			_this.remove(_this.box);
 		},
 		getEnableStatus: function(value, type) { //获取日期范围
@@ -462,20 +451,18 @@
 
 			firstDay = new Date(_year, _month, 1).getDay(), showMonth = _month + 1;
 			_this.dateHeader.innerHTML = _this.D + _this.headerUnit[2];
-			//Clear Table
-			if (_this.showWeek) {
+
+			if (_this.showWeek) { //Clear Table
 				_this.empty(_this.dateThead);
 			}
 
 			_this.empty(_this.dateTbody);
 
 			for (var i = 0; i < 6; i++) {
-				var tr = _this.createElement('tr');
-				//this.dateTbody.insertRow(i);
+				var tr = _this.createElement('tr'); //this.dateTbody.insertRow(i);				
 				for (var j = 0; j < 7; j++) {
 					var th,
-						//td = this.dateTbody.rows[i].insertCell(j),
-						td = _this.createElement('td'),
+						td = _this.createElement('td'), //td = this.dateTbody.rows[i].insertCell(j),
 						num = i * 7 + j,
 						status = true,
 						current, month = 0,
@@ -484,8 +471,7 @@
 					nowMonthDate = num - firstDay + 1;
 					prevMonthDate = Math.abs(firstDay - j - _this.getMaxDates(_year, _month - 1) - 1);
 					if (_this.showWeek) {
-						//插件头部-星期
-						if (!i && !j) {
+						if (!i && !j) { //插件头部-星期
 							this.dateThead.insertRow(i);
 						}
 						if (!i) {
@@ -569,7 +555,6 @@
 						if (showAllDate) {
 							_this.addClass(td, _this.name + '-enabled');
 						}
-
 					}
 					_this.append(td, tr);
 				}
@@ -591,5 +576,4 @@
 		return '日历插件';
 	};
 	window.MyCalendar = MyCalendar;
-
 })(this);

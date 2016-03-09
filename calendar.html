@@ -119,7 +119,9 @@ var myCalendar = new MyCalendar({
 		
 		
 		
-		<script src="build/my-calendar.min.js"></script>
+		<!-- <script src="build/my-calendar.min.js"></script> -->
+		<script src="src/kingwell.js"></script>
+		<script src="src/calendar.js"></script>
 		<script>
 
 new MyCalendar({
@@ -139,7 +141,7 @@ new MyCalendar({
 	el: document.getElementById('calendar4'), //el为DOM结点
 	showAllDate: true, //显示所有日期，包括上月、下月	
 });
-new MyCalendar({
+var c5= new MyCalendar({
 	el: document.getElementById('calendar5'), //el为DOM结点
 	showAllDate: true, //显示所有日期，包括上月、下月
 	minDate: '2015-02-02',

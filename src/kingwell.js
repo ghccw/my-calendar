@@ -433,7 +433,30 @@
 	function MyEvent() {}
 	MyEvent.prototype = {
 		on: function() {},
-		off: function() {}
+		off: function() {},
+		getEvent: function(ev) {
+			return ev || window.event;
+		},
+		getTarget: function(ev) {
+			return this.getEvent(ev).target || this.getEvent(ev).srcElement;
+		},
+		stopPropagation: function(ev) {
+			if (window.event) {
+				return this.getEvent(ev).cancelBubble = true;
+			} else {
+				return this.getEvent(ev).stopPropagation();
+			}
+		},
+		stopDefault: function(ev) {
+			if (window.event) {
+				return this.getEvent().returnValue = false;
+			} else {
+				return this.getEvent(ev).preventDefault();
+			}
+		},
+		which: function(ev) {
+			return this.getEvent(ev).keyCode;
+		}
 	};
 
 	function Kingwell() {}
