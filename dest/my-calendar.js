@@ -23,6 +23,28 @@
 			return subObj;
 		};
 
+
+	if (!Function.prototype.bind) {
+		Function.prototype.bind = function(oThis) {
+			if (typeof this !== "function") {
+				// closest thing possible to the ECMAScript 5 internal IsCallable function
+				throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+			}
+
+			var aArgs = Array.prototype.slice.call(arguments, 1),
+				fToBind = this,
+				fNOP = function() {},
+				fBound = function() {
+					return fToBind.apply(this instanceof fNOP && oThis ? this : oThis || window,
+						aArgs.concat(Array.prototype.slice.call(arguments)));
+				};
+
+			fNOP.prototype = this.prototype;
+			fBound.prototype = new fNOP();
+
+			return fBound;
+		};
+	}
 	//时间
 	function MyDate() {}
 	MyDate.prototype = {
@@ -430,10 +452,73 @@
 		}
 	};
 	//MyEvent
+	function fixEvent(event) {
+		event.preventDefault = fixEvent.preventDefault;
+		event.stopPropagation = fixEvent.stopPropagation;
+		return event;
+	};
+	fixEvent.preventDefault = function() {
+		this.returnValue = false;
+	};
+	fixEvent.stopPropagation = function() {
+		this.cancelBubble = true;
+	};
+
 	function MyEvent() {}
 	MyEvent.prototype = {
-		on: function() {},
-		off: function() {},
+		// on: function(element, type, handle) {
+		// 	if (window.addEventListener) {
+		// 		element.addEventListener(type, handle, false);
+		// 	} else if (window.attachEvent) {
+		// 		element.attachEvent('on' + type, handle);
+		// 	} else {
+		// 		element['on' + type] = handle;
+		// 	}
+		// },
+		// off: function(element, type, handle) {
+		// 	if (window.removeEventListener) {
+		// 		element.removeEventListener(type, handle, false);
+		// 	} else if (window.attachEvent) {
+		// 		element.detachEvent('on' + type, handle);
+		// 	} else {
+		// 		element['on' + type] = null;
+		// 	}
+		// },
+		__guid: 1,
+		addEvent: function(element, type, handler) {
+			if (!handler.$$guid) {
+				handler.$$guid = this.__guid++;
+			}
+			if (!element.events) {
+				element.events = {};
+			}
+			var handlers = element.events[type];
+			if (!handlers) {
+				handlers = element.events[type] = {};
+				if (element["on" + type]) {
+					handlers[0] = element["on" + type];
+				}
+			}
+			handlers[handler.$$guid] = handler;
+			element["on" + type] = this.handleEvent;
+		},
+		removeEvent: function(element, type, handler) {
+			if (element.events && element.events[type]) {
+				delete element.events[type][handler.$$guid];
+			}
+		},
+		handleEvent: function(event) {
+			var returnValue = true;
+			event = event || fixEvent(window.event);
+			var handlers = this.events[event.type];
+			for (var i in handlers) {
+				this.$$handleEvent = handlers[i];
+				if (this.$$handleEvent(event) === false) {
+					returnValue = false;
+				}
+			}
+			return returnValue;
+		},
 		getEvent: function(ev) {
 			return ev || window.event;
 		},
@@ -511,7 +596,7 @@
 
 })(this);
 (function(window, undefined) {
-	var fn;
+	var fn, extend = KW.extend;
 
 	function MyCalendarDefault() {}
 	MyCalendarDefault.prototype = {
@@ -542,9 +627,10 @@
 		this.minDate = this.compatibleDateFormat(this.minDate);
 		this.init();
 	}
+
 	MyCalendar.prototype = fn = {
 		name: 'calendar',
-		setValue: function() {
+		setValue: function() { //设置值
 			var _this = this;
 			if (!_this.defaultValue) {
 				_this.defaultValue = _this.el.value;
@@ -554,7 +640,7 @@
 				_this.el.readOnly = true;
 			}
 		},
-		setPostion: function() {
+		setPostion: function() { //设置位置
 			var _this = this,
 				pos = _this.getPosition(_this.el);
 			_this.setCss(_this.box, {
@@ -588,21 +674,18 @@
 				_this.open();
 			};
 			_this.el.onblur = function() {
-				clearTimeout(_this.timer);
-				_this.timer = setTimeout(function() {
-					if (!_this.editStatus) {
-						_this.close();
-					}
-				}, 100);
+				// clearTimeout(_this.timer);
+				// _this.timer = setTimeout(function() {
+				// 	if (!_this.editStatus) {
+				// 		_this.close();
+				// 	}
+				// }, 200);
 			};
-			_this.box.onmousedown = function() {
-				_this.editStatus = true;
+			_this.box.onmouseover = function(ev) {}
+			_this.box.onmouseout = function(ev) {};
+			_this.box.onclick = function(ev) {
+				ev.stopPropagation();
 			};
-			_this.box.onmouseout = function() {
-				_this.editStatus = false;
-				_this.el.focus();
-			};
-			_this.box.onclick = function() {};
 			_this.yearPrev.onclick = function() {
 				_this.yearNum -= 10;
 				_this.updateYear({
@@ -916,10 +999,8 @@
 					_this.addClass(td, _this.name + '-this-month');
 				}
 				status = _this.getEnableStatus(m, 'month');
-
 				if (status) {
 					(function(month) {
-
 						td.onclick = function() {
 							var date = new Date();
 							_this.M = month;
@@ -945,7 +1026,6 @@
 			}
 			_this.append(frg, _this.monthTbody);
 		},
-
 		updateDate: function(options) {
 			var _this = this,
 				ops = options || {},
@@ -1076,14 +1156,15 @@
 		}
 	};
 
-	KW.extend(fn, new KW.Type());
-	KW.extend(fn, new KW.Dom());
-	KW.extend(fn, new KW.Css());
-	KW.extend(fn, new KW.Date());
-	KW.extend(fn, new KW.Event());
-	KW.extend(fn, new KW.Box());
-	KW.extend(fn, new KW.Kingwell());
-	KW.extend(fn, new MyCalendarDefault());
+	extend(fn, new KW.Type());
+	extend(fn, new KW.Dom());
+	extend(fn, new KW.Css());
+	extend(fn, new KW.Date());
+	extend(fn, new KW.Event());
+	extend(fn, new KW.Box());
+	extend(fn, new KW.Kingwell());
+	extend(fn, new MyCalendarDefault());
+
 	MyCalendar.toString = function() {
 		return '日历插件';
 	};

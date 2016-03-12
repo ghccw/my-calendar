@@ -1,5 +1,5 @@
 (function(window, undefined) {
-	var fn;
+	var fn, extend = KW.extend;
 
 	function MyCalendarDefault() {}
 	MyCalendarDefault.prototype = {
@@ -30,9 +30,10 @@
 		this.minDate = this.compatibleDateFormat(this.minDate);
 		this.init();
 	}
+
 	MyCalendar.prototype = fn = {
 		name: 'calendar',
-		setValue: function() {
+		setValue: function() { //设置值
 			var _this = this;
 			if (!_this.defaultValue) {
 				_this.defaultValue = _this.el.value;
@@ -42,7 +43,7 @@
 				_this.el.readOnly = true;
 			}
 		},
-		setPostion: function() {
+		setPostion: function() { //设置位置
 			var _this = this,
 				pos = _this.getPosition(_this.el);
 			_this.setCss(_this.box, {
@@ -76,21 +77,18 @@
 				_this.open();
 			};
 			_this.el.onblur = function() {
-				clearTimeout(_this.timer);
-				_this.timer = setTimeout(function() {
-					if (!_this.editStatus) {
-						_this.close();
-					}
-				}, 100);
+				// clearTimeout(_this.timer);
+				// _this.timer = setTimeout(function() {
+				// 	if (!_this.editStatus) {
+				// 		_this.close();
+				// 	}
+				// }, 200);
 			};
-			_this.box.onmousedown = function() {
-				_this.editStatus = true;
+			_this.box.onmouseover = function(ev) {}
+			_this.box.onmouseout = function(ev) {};
+			_this.box.onclick = function(ev) {
+				ev.stopPropagation();
 			};
-			_this.box.onmouseout = function() {
-				_this.editStatus = false;
-				_this.el.focus();
-			};
-			_this.box.onclick = function() {};
 			_this.yearPrev.onclick = function() {
 				_this.yearNum -= 10;
 				_this.updateYear({
@@ -404,10 +402,8 @@
 					_this.addClass(td, _this.name + '-this-month');
 				}
 				status = _this.getEnableStatus(m, 'month');
-
 				if (status) {
 					(function(month) {
-
 						td.onclick = function() {
 							var date = new Date();
 							_this.M = month;
@@ -433,7 +429,6 @@
 			}
 			_this.append(frg, _this.monthTbody);
 		},
-
 		updateDate: function(options) {
 			var _this = this,
 				ops = options || {},
@@ -564,14 +559,15 @@
 		}
 	};
 
-	KW.extend(fn, new KW.Type());
-	KW.extend(fn, new KW.Dom());
-	KW.extend(fn, new KW.Css());
-	KW.extend(fn, new KW.Date());
-	KW.extend(fn, new KW.Event());
-	KW.extend(fn, new KW.Box());
-	KW.extend(fn, new KW.Kingwell());
-	KW.extend(fn, new MyCalendarDefault());
+	extend(fn, new KW.Type());
+	extend(fn, new KW.Dom());
+	extend(fn, new KW.Css());
+	extend(fn, new KW.Date());
+	extend(fn, new KW.Event());
+	extend(fn, new KW.Box());
+	extend(fn, new KW.Kingwell());
+	extend(fn, new MyCalendarDefault());
+
 	MyCalendar.toString = function() {
 		return '日历插件';
 	};
