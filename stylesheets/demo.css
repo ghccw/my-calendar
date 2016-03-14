@@ -56,7 +56,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 
 html,
 body {
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .body {
@@ -67,7 +67,6 @@ body {
   border: 1px solid #ccc;
   background-color: #fafafa;
   border-radius: 5px;
-  font-size: 12px;
 }
 .body h1 {
   text-align: center;
@@ -82,16 +81,6 @@ body {
   border-bottom: 1px solid #ccc;
   padding: 10px 0;
   margin: 5px 0px;
-}
-
-pre {
-  margin: 15px 0;
-  border: 1px solid #ccc;
-  padding: 20px;
-  background-color: #f2f2f2;
-  border-radius: 5px;
-  line-height: 1.5;
-  font-family: 'courier new';
 }
 
 .calendar-input {

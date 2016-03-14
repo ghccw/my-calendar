@@ -4,7 +4,9 @@
 	function MyCalendarDefault() {}
 	MyCalendarDefault.prototype = {
 		weekStart: 0,
-		error: function() {}, //出错回调
+		error: function(err) {
+			this.log(err);
+		}, //出错回调
 		callback: function() {}, //回调，this为实例，第一个参数为date string，第二个参数为一个对象
 		selected: function() {},
 		top: 5, //左边距离
@@ -15,6 +17,7 @@
 		readOnly: true, //插件只读
 		showAllDate: false, //显示所有日期，包括上月，下月的日期
 		showWeek: false,
+		showTime: false,
 		weekText: ['日', '一', '二', '三', '四', '五', '六'],
 		headerUnit: ['年', '月', '日'],
 		monthUnit: ['月']
@@ -51,10 +54,12 @@
 				left: pos.left + _this.left + 'px'
 			});
 		},
-		initDate: function() {
+		initDate: function(dateObj) {
 			var date = null,
-				value = this.defaultValue || this.el.value;
-			if (this.isValidDate(value)) {
+				value = this.el.value || this.defaultValue;
+			if (dateObj) {
+				date = dateObj;
+			} else if (this.isValidDate(value)) {
 				this.el.value = value;
 				this.text(this.el, value);
 				date = this.compatibleDateFormat(value);
@@ -73,34 +78,74 @@
 		},
 		events: function() {
 			var _this = this;
+
+			_this.el.onclick = function(ev) {
+				ev.stopPropagation();
+			};
 			_this.el.onfocus = function() {
 				_this.open();
 			};
-			_this.el.onblur = function() {
-				// clearTimeout(_this.timer);
-				// _this.timer = setTimeout(function() {
-				// 	if (!_this.editStatus) {
-				// 		_this.close();
-				// 	}
-				// }, 200);
-			};
-			_this.box.onmouseover = function(ev) {}
-			_this.box.onmouseout = function(ev) {};
+
+
 			_this.box.onclick = function(ev) {
 				ev.stopPropagation();
 			};
-			_this.yearPrev.onclick = function() {
+			_this.prevMoreYear.onclick = function() {
 				_this.yearNum -= 10;
 				_this.updateYear({
 					year: _this.yearNum
 				});
 			};
-			_this.yearNext.onclick = function() {
+			_this.nextMoreYear.onclick = function() {
 				_this.yearNum += 10;
 				_this.updateYear({
 					year: _this.yearNum
 				});
 			};
+			//_this.addEvent(_this.prevYear, 'click', _this.setPrevYear.bind(_this));
+			//_this.addEvent(_this.nextYear, 'click', _this.setNextYear.bind(_this));
+		},
+		show: function() {
+			
+		},
+		setStatus: function() {
+
+		},
+		setPrevYear: function() {
+
+			if (this.getEnableStatus(this.Y - 1, 'year')) {
+				this.Y--;
+				this.DATE.setYear(this.Y);
+				//this.updateAll();
+				if (this.Y >= this.currentMinYear && this.Y <= this.currentMaxYear) {
+					console.log(1);
+				} else {
+					console.log(0);
+				}
+				this.updateMonth();
+				this.updateDate();
+				this.select({
+					type: 'year'
+				});
+			} else {
+				this.error.call(this, '最小年为：' + this.minDate);
+				this.initDate(this.getDate(this.minDate));
+				this.updateAll();
+			}
+		},
+		setNextYear: function() {
+			if (this.getEnableStatus(this.Y + 1, 'year')) {
+				this.Y++;
+				this.DATE.setYear(this.Y);
+				this.updateAll();
+				this.select({
+					type: 'year'
+				});
+			} else {
+				this.error.call(this, '最小年为：' + this.maxDate);
+				this.initDate(this.getDate(this.maxDate));
+				this.updateAll();
+			}
 		},
 		getDateStatus: function() { //判断最小日期是否大于最大日历
 			var status = true;
@@ -117,11 +162,10 @@
 				date = this.getNewDate(this.Y, this.M, this.D),
 				dateString = _this.getCurrentDate(date);
 			try {
-
 				_this.el.value = dateString;
 				_this.text(_this.el, dateString);
-				_this.editStatus = false;
 				_this.callback.call(_this, dateString, args);
+				_this.log(data, args);
 			} catch (e) {}
 			if (args.type === 'date') {
 				_this.close();
@@ -160,10 +204,10 @@
 			_this.yearPage = _this.createElement('div', {
 				className: _this.name + '-year-page'
 			});
-			_this.yearPrev = _this.createElement('div', {
+			_this.prevMoreYear = _this.createElement('div', {
 				className: _this.name + '-year-prev'
 			});
-			_this.yearNext = _this.createElement('div', {
+			_this.nextMoreYear = _this.createElement('div', {
 				className: _this.name + '-year-next'
 			});
 			_this.append(_this.yearThead, _this.yearTable);
@@ -171,10 +215,10 @@
 			_this.append(_this.yearHeader, _this.yearBox);
 			_this.append(_this.yearTable, _this.yearTableBox);
 			_this.append(_this.yearTableBox, _this.yearBox);
-			_this.yearPrev.innerHTML = '<span>＜</span>';
-			_this.yearNext.innerHTML = '<span>＞</span>';
-			_this.append(_this.yearPrev, _this.yearPage);
-			_this.append(_this.yearNext, _this.yearPage);
+			_this.prevMoreYear.innerHTML = '<span>＜</span>';
+			_this.nextMoreYear.innerHTML = '<span>＞</span>';
+			_this.append(_this.prevMoreYear, _this.yearPage);
+			_this.append(_this.nextMoreYear, _this.yearPage);
 			_this.append(_this.yearPage, _this.yearBox);
 			_this.append(_this.yearBox, _this.box);
 		},
@@ -234,35 +278,115 @@
 			_this.append(_this.dateTableBox, _this.dateBox);
 			_this.append(_this.dateBox, _this.box);
 		},
+		__createHour: function() {
+			var _this = this,
+				create = _this.createElement;
+			_this.timeBox = create('div', {
+				className: _this.name + '-time-box'
+			});
+			_this.hourBox = create('div', {
+				className: _this.name + '-hour-box'
+			});
+			_this.hourTableBox = create('div', {
+				className: _this.name + '-hour-table-box'
+			});
+			_this.hour = create('table', {});
+			_this.append(_this.hour, _this.hourTableBox);
+			_this.append(_this.hourTableBox, _this.hourBox);
+			_this.append(_this.hourBox, _this.timeBox);
+		},
+		__createMinute: function() {
+			var _this = this,
+				create = _this.createElement;
+			_this.minuteBox = create('div', {
+				className: _this.name + '-minute-box'
+			});
+			_this.minuteTableBox = create('div', {
+				className: _this.name + '-minute-table-box'
+			});
+			_this.minute = create('table', {});
+			_this.append(_this.minute, _this.minuteTableBox);
+			_this.append(_this.minuteTableBox, _this.minuteBox);
+			_this.append(_this.minuteBox, _this.timeBox);
+		},
+		__createSecond: function() {
+			var _this = this,
+				create = _this.createElement;
+			_this.secondBox = create('div', {
+				className: _this.name + '-second-box'
+			});
+			_this.secondTableBox = create('div', {
+				className: _this.name + '-second-table-box'
+			});
+			_this.second = create('table', {});
+			_this.append(_this.second, _this.secondTableBox);
+			_this.append(_this.secondTableBox, _this.secondBox);
+			_this.append(_this.secondBox, _this.timeBox);
+			_this.append(_this.timeBox, _this.box);
+		},
+		__createYearHtml: function() {
+			var _this = this,
+				create = _this.createElement;
+			this.nextYear = create('span');
+			this.prevYear = create('span');
+			this.nextYear.innerHTML = '下一年';
+			this.prevYear.innerHTML = '上一年';
+			_this.append(_this.prevYear, _this.box);
+			_this.append(_this.nextYear, _this.box);
+		},
 		create: function() {
 			this.__createYear();
 			this.__createMonth();
 			this.__createDate();
+			if (this.showTime) {
+				this.__createHour();
+				this.__createMinute();
+				this.__createSecond();
+			}
+			//this.__createYearHtml();
 		},
-		update: function() {
+		updateAll: function() {
 			this.updateYear();
 			this.updateMonth();
 			this.updateDate();
 		},
-		open: function() {
-			if (!this.lock) {
-				this.lock = true;
-				this.update();
-				this.append(this.box);
-				this.initDate();
-				this.setPostion();
-				this.setValue();
-				this.dateError = this.getDateStatus();
-				this.yearNum = 0;
-				if (!this.dateError) {
-					this.error.call(this, '最小日期不能大于最大日期');
-				}
+		update: function() {
+			this.updateAll();
+			if (this.showTime) {
+				this.updateHour();
+				this.updateMinute();
+				this.updateSecond();
 			}
+
+		},
+		open: function() {
+			this.log('open');
+			//if (!this.lock) {
+			this.lock = true;
+			this.update();
+			this.append(this.box);
+			this.initDate();
+			this.setValue();
+			this.setPostion();
+
+			this.dateError = this.getDateStatus();
+			this.yearNum = 0;
+			if (!this.dateError) {
+				this.error.call(this, '最小日期不能大于最大日期');
+			}
+			if (!this.eventDOC) {
+				this.eventDOC = true;
+				this.addEvent(document, 'click', this.close.bind(this));
+			}
+			//}
+			//this.addEvent(document, 'click', this.show.bind(this));
 		},
 		close: function() {
 			var _this = this;
 			_this.lock = false;
 			_this.remove(_this.box);
+			this.removeEvent(document, 'click', this.close.bind(this));
+			//this.removeEvent(document, 'click', this.show.bind(this));
 		},
 		getEnableStatus: function(value, type) { //获取日期范围
 			var _this = this,
@@ -347,6 +471,8 @@
 				tbodyTr, td, i = 0;
 			_this.empty(_this.yearTbody);
 			_this.yearHeader.innerHTML = _this.Y + _this.headerUnit[0];
+			_this.currentMinYear = _year - 5;
+			_this.currentMaxYear = _year + 5;
 			for (var y = _year - 5; y < _year + 5; y++) {
 				var status = true;
 				if (i % grid === 0) {
@@ -359,8 +485,10 @@
 				}
 				status = _this.getEnableStatus(y, 'year');
 				if (status) {
-					(function(year) {
-						td.onclick = function() {
+					_this.__loop({
+						element: td,
+						value: y,
+						callback: function(year) {
 							_this.Y = year;
 							_this.updateYear({
 								year: _this.yearNum
@@ -370,8 +498,8 @@
 							_this.select({
 								type: 'year'
 							});
-						};
-					})(y);
+						}
+					});
 					_this.addClass(td, _this.name + '-enabled');
 				} else {
 					_this.addClass(td, _this.name + '-disabled');
@@ -403,8 +531,10 @@
 				}
 				status = _this.getEnableStatus(m, 'month');
 				if (status) {
-					(function(month) {
-						td.onclick = function() {
+					_this.__loop({
+						element: td,
+						value: m,
+						callback: function(month) {
 							var date = new Date();
 							_this.M = month;
 							_this.updateMonth();
@@ -416,8 +546,8 @@
 							_this.select({
 								type: 'month'
 							});
-						};
-					})(m);
+						}
+					});
 				}
 				if (!status) {
 					_this.addClass(td, _this.name + '-disabled');
@@ -437,6 +567,7 @@
 				days, firstDay,
 				nowMonthDate, prevMonthDate, nextMonthDate = 1,
 				currentDate,
+				maxDateStatus = true,
 				dateObj, frg = document.createDocumentFragment();
 
 			_year = _this.Y || dateObj.getFullYear();
@@ -505,12 +636,25 @@
 					status = _this.getEnableStatus(currentDate, 'date');
 
 					if (status) {
+						// _this.__loop({
+						// 	element: td,
+						// 	date: current,
+						// 	month: month,
+						// 	currentDate: currentDate,
+						// 	showAllDate: showAllDate,
+						// 	callback: function(ops) {
+
+						// 	}
+						// });
+						//_this.log();
+						maxDateStatus = _this.getMaxDates(_year, _month) >= _this.D;
+
 						(function(date, month, currentDate, showAllDate) {
 							td.title = _this.getCurrentDate(currentDate);
 							if (!showAllDate) {
 								return;
 							}
-							td.onclick = function() {
+							_this.addEvent(td, 'click', function() {
 								var result;
 								result = _this.getDateAll(currentDate);
 								_this.Y = result.year;
@@ -528,7 +672,7 @@
 								_this.select({
 									type: 'date'
 								});
-							};
+							});
 						})(current, month, currentDate, showAllDate);
 					}
 
@@ -536,7 +680,7 @@
 					if (j === 0 || j === 6) { //周末
 						_this.addClass(td, _this.name + '-weekend');
 					}
-					if (nowMonthDate === _date) {
+					if (nowMonthDate === _date && maxDateStatus) {
 						_this.addClass(td, _this.name + '-today');
 					}
 					if (num < firstDay || num >= days + firstDay) {
@@ -556,6 +700,89 @@
 				_this.append(tr, frg);
 			}
 			_this.append(frg, _this.dateTbody);
+		},
+		updateHour: function(options) {
+			var _this = this,
+				frg = document.createDocumentFragment(),
+				tr, td, create = _this.createElement;
+
+			_this.empty(_this.hour);
+			for (var i = 0; i < 24; i++) {
+				if (i % 6 === 0) {
+					tr = create('tr');
+				}
+				td = create('td');
+				_this.__loop({
+					element: td,
+					value: i,
+					callback: function(i) {
+						alert(i);
+					}
+				});
+				td.innerHTML = i;
+				_this.append(td, tr);
+				_this.append(tr, frg);
+			}
+			_this.append(frg, _this.hour);
+		},
+		updateMinute: function(options) {
+			var _this = this,
+				frg = document.createDocumentFragment(),
+				tr, td, create = _this.createElement;
+
+			_this.empty(_this.minute);
+			for (var i = 0; i < 60; i += 5) {
+				if (i % 6 === 0) {
+					tr = create('tr');
+				}
+				td = create('td');
+				_this.__loop({
+					element: td,
+					value: i,
+					callback: function(i) {
+						alert(i);
+					}
+				});
+				td.innerHTML = _this.fixZero(i);
+				_this.append(td, tr);
+				_this.append(tr, frg);
+			}
+			_this.append(frg, _this.minute);
+		},
+		updateSecond: function(options) {
+			var _this = this,
+				frg = document.createDocumentFragment(),
+				tr, td, create = _this.createElement;
+
+			_this.empty(_this.second);
+			for (var i = 0; i < 60; i += 5) {
+				if (i % 6 === 0) {
+					tr = create('tr');
+				}
+				td = create('td');
+				_this.__loop({
+					element: td,
+					value: i,
+					callback: function(i) {
+						alert(i);
+					}
+				});
+				td.innerHTML = _this.fixZero(i);
+				_this.append(td, tr);
+				_this.append(tr, frg);
+			}
+			_this.append(frg, _this.second);
+		},
+		__loop: function(options) {
+			var _this = this,
+				ops = options || {};
+			(function(_value) {
+				_this.addEvent(ops.element, 'click', function() {
+					if (ops.callback) {
+						ops.callback(_value, ops);
+					}
+				});
+			})(ops.value);
 		}
 	};
 
