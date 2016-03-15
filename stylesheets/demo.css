@@ -54,15 +54,9 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   display: block;
 }
 
-html,
-body {
-  font-size: 14px;
-}
-
 .body {
   font-family: Arial;
-  width: 50%;
-  margin: 20px auto;
+  margin: 20px 50px 0 350px;
   padding: 20px;
   border: 1px solid #ccc;
   background-color: #fafafa;
@@ -113,4 +107,52 @@ body {
 .calendar-ui tbody .calendar-today,
 .calendar-ui tbody .calendar-today:hover {
   background-color: #348FE2;
+}
+
+.deme-box {
+  font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace !important;
+}
+
+.demo-menu-box {
+  position: fixed !important;
+  position: absolute;
+  width: 300px;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: #555;
+  border-right: 1px solid #333;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.demo-menu-box h1 {
+  padding: 10px;
+  font-weight: bold;
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  background-color: #333;
+}
+.demo-menu-box .demo-menu-body {
+  overflow: hidden;
+  padding: 10px;
+}
+.demo-menu-box ol {
+  margin: 30px 20px;
+}
+.demo-menu-box li {
+  padding-left: 0px;
+  margin: 10px;
+  list-style-type: decimal;
+  color: #fff;
+}
+.demo-menu-box a {
+  padding: 5px 0;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  color: #fff;
+  text-decoration: none;
+  margin: 20px 0;
 }

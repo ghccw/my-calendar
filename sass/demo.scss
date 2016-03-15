@@ -1,14 +1,15 @@
 @import 'compass/reset';
+@import 'mixin';
 
 html,
 body {
-	font-size: 14px;
+	
 }
 
 .body {
 	font-family: Arial;
-	width: 50%;
-	margin: 20px auto;
+	//width: 50%;
+	margin: 20px 50px 0 350px;
 	padding: 20px;
 	border: 1px solid #ccc;
 	background-color: #fafafa;
@@ -75,6 +76,61 @@ pre {
 	tbody .calendar-today,
 	tbody .calendar-today:hover {
 		background-color: #348FE2;
+	}
+
+}
+
+.deme-box {
+	font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace !important;
+}
+
+.demo-menu-box {
+	position: fixed !important;
+	position: absolute;
+	width: 300px;
+	height: 100%;
+	top: 0;
+	left: 0;
+	background-color: #555;
+	border-right: 1px solid #333;
+	overflow-x: hidden;
+	overflow-y: auto;
+
+	h1 {
+		padding: 10px;
+		font-weight: bold;
+		color: #fff;
+		font-size: 16px;
+		text-align: center;
+		background-color: #333;
+	}
+
+	.demo-menu-body {
+		overflow: hidden;
+		padding: 10px;
+	}
+
+	ol {
+		margin: 30px 20px;
+	}
+
+	li {
+		padding-left: 0px;
+		margin: 10px;
+		list-style-type: decimal;
+		color: #fff;
+	}
+
+	.demo-menu-box {
+	}
+
+	a {
+		//display: block;
+		padding: 5px 0;
+		@include ell;
+		color: #fff;
+		text-decoration: none;
+		margin: 20px 0;
 	}
 
 }

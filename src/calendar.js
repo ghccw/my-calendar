@@ -30,10 +30,10 @@
 		var _this = this;
 		var ops = options || {};
 		this.el = ops.el;
-		if (!MyCalendar.INSTANTIATION_ID) {
-			MyCalendar.INSTANTIATION_ID = 1;
+		if (!MyCalendar.openID) {
+			MyCalendar.openID = 1;
 		} else {
-			MyCalendar.INSTANTIATION_ID++;
+			MyCalendar.openID++;
 		}
 		for (var key in options) {
 			this[key] = options[key];
@@ -41,7 +41,16 @@
 		if (!MyCalendar.array) {
 			MyCalendar.array = [];
 		}
-
+		if (!this.hiddenInput) {
+			this.hiddenInput = this.createElement('input', {
+				type: 'hidden'
+			});
+			this.hiddenInput.value = '';
+			this.append(this.hiddenInput);
+		}
+		if (!this.el) {
+			this.el = this.hiddenInput;
+		}
 		this.maxDate = this.compatibleDateFormat(this.maxDate);
 		this.minDate = this.compatibleDateFormat(this.minDate);
 
@@ -57,8 +66,8 @@
 			_this.open();
 			_this.addEvent(document, 'click', MyCalendar[_this.random]);
 		};
-
 		this.init();
+
 	}
 
 	MyCalendar.prototype = fn = {
@@ -387,6 +396,7 @@
 			_this.append(_this.nextYear, _this.box);
 		},
 		create: function() {
+
 			this.__createYear();
 			this.__createMonth();
 			this.__createDate();

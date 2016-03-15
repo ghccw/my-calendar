@@ -615,6 +615,9 @@
 		showAllDate: false, //显示所有日期，包括上月，下月的日期
 		showWeek: false,
 		showTime: false,
+		autoSetPosition: true, //自动设置位置
+		parent: '',
+		holidays: [],
 		weekText: ['日', '一', '二', '三', '四', '五', '六'],
 		headerUnit: ['年', '月', '日'],
 		monthUnit: ['月']
@@ -624,10 +627,10 @@
 		var _this = this;
 		var ops = options || {};
 		this.el = ops.el;
-		if (!MyCalendar.INSTANTIATION_ID) {
-			MyCalendar.INSTANTIATION_ID = 1;
+		if (!MyCalendar.openID) {
+			MyCalendar.openID = 1;
 		} else {
-			MyCalendar.INSTANTIATION_ID++;
+			MyCalendar.openID++;
 		}
 		for (var key in options) {
 			this[key] = options[key];
@@ -635,7 +638,16 @@
 		if (!MyCalendar.array) {
 			MyCalendar.array = [];
 		}
-
+		if (!this.hiddenInput) {
+			this.hiddenInput = this.createElement('input', {
+				type: 'hidden'
+			});
+			this.hiddenInput.value = '';
+			this.append(this.hiddenInput);
+		}
+		if (!this.el) {
+			this.el = this.hiddenInput;
+		}
 		this.maxDate = this.compatibleDateFormat(this.maxDate);
 		this.minDate = this.compatibleDateFormat(this.minDate);
 
@@ -651,8 +663,8 @@
 			_this.open();
 			_this.addEvent(document, 'click', MyCalendar[_this.random]);
 		};
-
 		this.init();
+
 	}
 
 	MyCalendar.prototype = fn = {
@@ -671,11 +683,18 @@
 		setPostion: function() { //设置位置
 			var _this = this,
 				pos = _this.getPosition(_this.el);
-			_this.setCss(_this.box, {
-				top: pos.top + pos.height + _this.top + 'px',
-				left: pos.left + _this.left + 'px',
-				'z-index': _this.zIndex
-			});
+			if (_this.autoSetPosition) {
+				_this.setCss(_this.box, {
+					top: pos.top + pos.height + _this.top + 'px',
+					left: pos.left + _this.left + 'px',
+					'z-index': _this.zIndex
+				});
+			} else {
+				_this.setCss(_this.box, {
+					position: 'static'
+				});
+			}
+
 		},
 		initDate: function(dateObj) {
 			var date = null,
@@ -726,7 +745,7 @@
 		},
 		open: function() {
 			this.update();
-			this.append(this.box);
+			this.append(this.box, this.parent);
 			this.initDate();
 			this.setValue();
 			this.setPostion();
@@ -974,6 +993,7 @@
 			_this.append(_this.nextYear, _this.box);
 		},
 		create: function() {
+
 			this.__createYear();
 			this.__createMonth();
 			this.__createDate();
