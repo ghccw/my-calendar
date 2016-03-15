@@ -621,24 +621,49 @@
 	};
 
 	function MyCalendar(options) {
+		var _this = this;
 		var ops = options || {};
 		this.el = ops.el;
+		if (!MyCalendar.INSTANTIATION_ID) {
+			MyCalendar.INSTANTIATION_ID = 1;
+		} else {
+			MyCalendar.INSTANTIATION_ID++;
+		}
 		for (var key in options) {
 			this[key] = options[key];
 		}
+		if (!MyCalendar.array) {
+			MyCalendar.array = [];
+		}
+
 		this.maxDate = this.compatibleDateFormat(this.maxDate);
 		this.minDate = this.compatibleDateFormat(this.minDate);
+
+		this.__open = function() {
+			_this.random = this.name + '-' + new Date().getTime() + Math.round(Math.random() * 10000);
+			MyCalendar[this.random] = function() {
+				if (_this.autoClose) {
+					_this.close();
+				}
+				_this.removeEvent(document, 'click', MyCalendar[_this.random]);
+			};
+			MyCalendar.array.push(MyCalendar[this.random]);
+			_this.open();
+			_this.addEvent(document, 'click', MyCalendar[_this.random]);
+		};
+
 		this.init();
 	}
 
 	MyCalendar.prototype = fn = {
 		name: 'calendar',
+		zIndex: 1000,
+		autoClose: true,
 		setValue: function() { //设置值
 			var _this = this;
 			if (!_this.defaultValue) {
 				_this.defaultValue = _this.el.value;
 			}
-
 			if (_this.readOnly) {
 				_this.el.readOnly = true;
 			}
@@ -648,7 +673,8 @@
 				pos = _this.getPosition(_this.el);
 			_this.setCss(_this.box, {
 				top: pos.top + pos.height + _this.top + 'px',
-				left: pos.left + _this.left + 'px'
+				left: pos.left + _this.left + 'px',
+				'z-index': _this.zIndex
 			});
 		},
 		initDate: function(dateObj) {
@@ -675,15 +701,13 @@
 		},
 		events: function() {
 			var _this = this;
-
 			_this.el.onclick = function(ev) {
 				ev.stopPropagation();
 			};
 			_this.el.onfocus = function() {
-				_this.open();
+				_this.closeAll();
+				_this.__open();
 			};
-
-
 			_this.box.onclick = function(ev) {
 				ev.stopPropagation();
 			};
@@ -699,11 +723,29 @@
 					year: _this.yearNum
 				});
 			};
-			//_this.addEvent(_this.prevYear, 'click', _this.setPrevYear.bind(_this));
-			//_this.addEvent(_this.nextYear, 'click', _this.setNextYear.bind(_this));
 		},
-		show: function() {
-			
+		open: function() {
+			this.update();
+			this.append(this.box);
+			this.initDate();
+			this.setValue();
+			this.setPostion();
+			this.dateError = this.getDateStatus();
+			this.yearNum = 0;
+			if (!this.dateError) {
+				this.error.call(this, '最小日期不能大于最大日期');
+			}
+		},
+		close: function() {
+			var _this = this;
+			_this.remove(_this.box);
+		},
+		closeAll: function() {
+			var arr = MyCalendar.array;
+			for (var i = 0; i < arr.length; i++) {
+				arr[i]();
+			}
+			MyCalendar.array = [];
 		},
 		setStatus: function() {
 
@@ -764,7 +806,7 @@
 				_this.callback.call(_this, dateString, args);
 				_this.log(data, args);
 			} catch (e) {}
-			if (args.type === 'date') {
+			if (args.type === 'date' && _this.autoClose) {
 				_this.close();
 			}
 		},
@@ -954,36 +996,6 @@
 				this.updateMinute();
 				this.updateSecond();
 			}
-
-		},
-		open: function() {
-			this.log('open');
-			//if (!this.lock) {
-			this.lock = true;
-			this.update();
-			this.append(this.box);
-			this.initDate();
-			this.setValue();
-			this.setPostion();
-
-			this.dateError = this.getDateStatus();
-			this.yearNum = 0;
-			if (!this.dateError) {
-				this.error.call(this, '最小日期不能大于最大日期');
-			}
-			if (!this.eventDOC) {
-				this.eventDOC = true;
-				this.addEvent(document, 'click', this.close.bind(this));
-			}
-			//}
-			//this.addEvent(document, 'click', this.show.bind(this));
-		},
-		close: function() {
-			var _this = this;
-			_this.lock = false;
-			_this.remove(_this.box);
-			this.removeEvent(document, 'click', this.close.bind(this));
-			//this.removeEvent(document, 'click', this.show.bind(this));
 		},
 		getEnableStatus: function(value, type) { //获取日期范围
 			var _this = this,

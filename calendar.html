@@ -11,46 +11,51 @@
 			div.syntaxhighlighter td.code code{font-size: 16px !important;}
 		</style>
 		<script src="build/shCore.js"></script>
-		<script src="build/shBrushJScript.js"></script>		
-		<script type="text/javascript">SyntaxHighlighter.all();</script>
+		<script src="build/shBrushJScript.js"></script>
+		<script type="text/javascript">
+			SyntaxHighlighter.all({
+				brush: 'js',
+				toolbar: false
+			});
+		</script>
 	</head>
 	<body>
 		<div class="body">
 			<h1>My Calendar V1.0 DEMO</h1>
 			<h2>调用方法</h2>
-			<pre class="brush: js;">
+			<pre class="">
 				new MyCalendar({
-				el: document.getElementById('calendar1')//el为DOM结点
+					el: document.getElementById('calendar1')//el为DOM结点
 				});
 			</pre>
 			<input class="calendar-input" value="" type="text" name="" id="calendar1" />
 			<h2>显示所有日期，包括上月、下月</h2>
 			<input class="calendar-input" value="" type="text" name="" id="calendar2" />
-			<pre class="brush: js;">
+			<pre class="">
 				new MyCalendar({
-				el: document.getElementById('calendar2'), //el为DOM结点
-				showAllDate: true //显示所有日期，包括上月、下月
+					el: document.getElementById('calendar2'), //el为DOM结点
+					showAllDate: true //显示所有日期，包括上月、下月
 				});
 			</pre>
 			<h2>显示默认值-调用设置</h2>
-			<pre class="brush: js;">
+			<pre class="">
 				new MyCalendar({
-				el: document.getElementById('calendar3'), //el为DOM结点
-				showAllDate: true, //显示所有日期，包括上月、下月
-				defaultValue: '2016-02-08' //默认值 
+					el: document.getElementById('calendar3'), //el为DOM结点
+					showAllDate: true, //显示所有日期，包括上月、下月
+					defaultValue: '2016-02-08' //默认值 
 				});
 			</pre>
 			<input class="calendar-input" value="" type="text" name="" id="calendar3" />
 			<h2>显示默认值-默认值设置</h2>
-			<pre class="brush: js;">
+			<pre class="">
 				new MyCalendar({
-				el: document.getElementById('calendar4'), //el为DOM结点
-				showAllDate: true, //显示所有日期，包括上月、下月
+					el: document.getElementById('calendar4'), //el为DOM结点
+					showAllDate: true, //显示所有日期，包括上月、下月
 				});
 			</pre>
 			<input class="calendar-input" value="2016-02-08" type="text" name="" id="calendar4" />
 			<h2>设置日期范围，如：2015-02-02-2018-02-02</h2>
-			<pre class="brush: js;">
+			<pre class="">
 				new MyCalendar({
 				el: document.getElementById('calendar5'), //el为DOM结点
 				showAllDate: true, //显示所有日期，包括上月、下月
@@ -60,7 +65,7 @@
 			</pre>
 			<input class="calendar-input" value="" type="text" name="" id="calendar5" />
 			<h2>调整位置</h2>
-			<pre class="brush: js;">
+			<pre class="">
 				new MyCalendar({
 				el: document.getElementById('calendar6'), //el为DOM结点
 				showAllDate: true, //显示所有日期，包括上月、下月
@@ -72,7 +77,7 @@
 			</pre>
 			<input class="calendar-input" value="" type="text" name="" id="calendar6" />
 			<h2>回调</h2>
-			<pre class="brush: js;">
+			<pre class="">
 				var myCalendar = new MyCalendar({
 				el: document.getElementById('calendar7'), //el为DOM结点
 				showAllDate: true, //显示所有日期，包括上月、下月
@@ -88,7 +93,7 @@
 			</pre>
 			<input class="calendar-input" value="" type="text" name="" id="calendar7" />
 			<h2>皮肤-添加样式</h2>
-			<pre class="brush: js;">
+			<pre class="">
 				var myCalendar = new MyCalendar({
 				el: document.getElementById('calendar8'), //el为DOM结点
 				showAllDate: true, //显示所有日期，包括上月、下月
