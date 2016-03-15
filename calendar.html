@@ -22,7 +22,22 @@
 	<body>
 		<div class="body">
 			<h1>My Calendar V1.0 DEMO</h1>
-			<h2>调用方法</h2>
+			<h2>显示在页面中调用方法</h2>
+			<pre class="">
+				var c0 = new MyCalendar({
+					skin:'calendar-ui',
+					autoClose:false,//是否自动关闭
+					autoSetPosition:false,//设置位置
+					parent:document.getElementById('demo'),//父节点，默认为body
+					callback:function(){
+						//回调
+					},
+					el: document.getElementById('calendar1') //el为DOM结点
+				});
+				c0.open();//手动打开
+			</pre>
+			<div id="demo"></div>
+			<h2>通用调用方法</h2>			
 			<pre class="">
 				new MyCalendar({
 					el: document.getElementById('calendar1')//el为DOM结点
@@ -137,6 +152,17 @@
 		<script src="src/kingwell.js"></script>
 		<script src="src/calendar.js"></script>
 		<script>
+		var c0 = new MyCalendar({
+			skin:'calendar-ui',
+			autoClose:false,//是否自动关闭
+			autoSetPosition:false,//设置位置
+			parent:document.getElementById('demo'),//父节点，默认为body
+			callback:function(){
+				//回调
+			},
+			el: document.getElementById('calendar1') //el为DOM结点
+		});
+		c0.open();//手动打开
 		var c1 = new MyCalendar({
 			el: document.getElementById('calendar1') //el为DOM结点
 		});

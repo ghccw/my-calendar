@@ -98,12 +98,12 @@ body {
 .calendar-ui .calendar-year-box,
 .calendar-ui .calendar-month-box,
 .calendar-ui .calendar-date-box {
-  border-color: #666;
+  border-color: #fff;
 }
 .calendar-ui .calendar-year-header,
 .calendar-ui .calendar-month-header,
 .calendar-ui .calendar-date-header {
-  background-color: #333;
+  background-color: #348FE2;
   color: #fff;
 }
 .calendar-ui tbody .calendar-this-year,
@@ -112,5 +112,5 @@ body {
 .calendar-ui tbody .calendar-this-month:hover,
 .calendar-ui tbody .calendar-today,
 .calendar-ui tbody .calendar-today:hover {
-  background-color: #333;
+  background-color: #348FE2;
 }

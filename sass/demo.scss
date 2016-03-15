@@ -58,13 +58,13 @@ pre {
 	.calendar-year-box,
 	.calendar-month-box,
 	.calendar-date-box {
-		border-color: #666;
+		border-color: #fff;
 	}
 
 	.calendar-year-header,
 	.calendar-month-header,
 	.calendar-date-header {
-		background-color: #333;
+		background-color: #348FE2;
 		color: #fff;
 	}
 
@@ -74,7 +74,7 @@ pre {
 	tbody .calendar-this-month:hover,
 	tbody .calendar-today,
 	tbody .calendar-today:hover {
-		background-color: #333;
+		background-color: #348FE2;
 	}
 
 }
