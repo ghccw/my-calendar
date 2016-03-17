@@ -827,8 +827,15 @@
 	extend(fn, new KW.Kingwell());
 	extend(fn, new MyCalendarDefault());
 
-	MyCalendar.toString = function() {
-		return '日历插件';
+
+	var pro = {
+		version: '1.0.1',
+		toString: function() {
+			return '日历插件';
+		}
 	};
+	for (var key in pro) {
+		MyCalendar[key] = pro[key];
+	}
 	window.MyCalendar = MyCalendar;
 })(this);

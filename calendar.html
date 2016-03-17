@@ -26,7 +26,7 @@
 		</div>
 		<div class="body">
 			<h1>My Calendar V1.0 DEMO</h1>
-			<h2>完事DEMO</h2>
+			<h2>完整DEMO</h2>
 			<pre class="highlight:[6,7]">
 				&lt;!DOCTYPE html&gt;
 				&lt;html lang="en"&gt;
@@ -41,8 +41,7 @@
 				&lt;/body&gt;
 				&lt;/html&gt;
 			</pre>
-			<pre class="highlight:[18]">
-
+			<pre class="highlight:[16]">
 				//完整Demo
 				var c1 = new MyCalendar({
 					skin: 'calendar-ui', //皮肤
@@ -73,7 +72,7 @@
 			<h2>相对el位置</h2>
 			<pre class="highlight:[5,6]">
 				//相对el位置
-				var c2 = new MyCalendar({
+				var c3 = new MyCalendar({
 					el: $$('calendar2'), //触发的元素
 					autoSetPosition: true, //自动设置位置，一般与parent一起用
 					left: 100, //距离el left的位置，位置px
@@ -85,7 +84,7 @@
 			<h2>默认值</h2>
 			<pre class="highlight:[4]">
 				//默认值
-				var c3 = new MyCalendar({
+				var c4 = new MyCalendar({
 					el: $$('calendar4'),
 					defaultValue: '2015-01-01', //默认值
 				});
@@ -94,7 +93,7 @@
 			<h2>日期范围2010-01-01-2026-10-12</h2>
 			<pre class="highlight:[4,5]">
 				//日期范围
-				var c4 = new MyCalendar({
+				var c5 = new MyCalendar({
 					el: $$('calendar5'), //触发的元素
 					maxDate: '2026-10-12', //日期范围控制-最大日期
 					minDate: '2010-01-01', //日期范围控制-最小日期
@@ -105,22 +104,22 @@
 			<h2>显示所有，显示当月</h2>
 			<pre class="highlight:[4,9]">
 				//显示所有，显示当月
-				var c6 = new MyCalendar({
+				var c7 = new MyCalendar({
 					el: $$('calendar6'),
 					showAllDate: true, //显示所有日期，包括上个月、下个月
 				});
 				//显示当月
-				var c7 = new MyCalendar({
+				var c8 = new MyCalendar({
 					el: $$('calendar7'),
 					showAllDate: true, //显示当月
 				});
 			</pre>
-				<input type="text" id="calendar6" class="calendar-input">
-				<input type="text" id="calendar7" class="calendar-input">
+				显示所有：<input type="text" id="calendar6" class="calendar-input">
+				显示当月：<input type="text" id="calendar7" class="calendar-input">
 			<h2>回调</h2>
-			<pre>
+			<pre class="highlight:[4]">
 				//回调
-				var c8 = new MyCalendar({
+				var c9 = new MyCalendar({
 					el: $$('calendar8'),
 					callback: function(data, arg) { //回调
 						alert(data, arg);
@@ -129,9 +128,9 @@
 			</pre>
 			<input type="text" id="calendar8" class="calendar-input">
 			<h2>皮肤</h2>
-			<pre>
+			<pre class="highlight:[4]">
 				//皮肤
-				var c9 = new MyCalendar({
+				var c10 = new MyCalendar({
 					skin: 'calendar-ui', //皮肤
 					el: $$('calendar9')
 				});
@@ -146,6 +145,75 @@
 		<script src="src/kingwell.js"></script>
 		<script src="src/calendar.js"></script>
 		<script src="src/demo.js"></script>
-		 
+<script>
+
+var $$ = function(id) {
+	return document.getElementById(id);
+};
+//完整Demo
+var c1 = new MyCalendar({
+	skin: 'calendar-ui', //皮肤
+	autoClose: false, //自动关闭
+	//el: $$('calendar1'), //触发的元素
+	readOnly: true, //el只读
+	parent: $$('calendar1'),
+	autoSetPosition: false, //自动设置位置，一般与parent一起用
+	left: 0, //距离el left的位置，位置px
+	top: 5, //距离el top的位置，位置px
+	showAllDate: true, //显示所有日期，包括上个月、下个月
+	defaultValue: '2015-01-01', //默认值
+	maxDate: '2026-10-12', //日期范围控制-最大日期
+	minDate: '2010-01-01', //日期范围控制-最小日期
+});
+c1.open(); //手动打开
+//c1.close(); //手动关闭
+
+//简单调用
+var c2 = new MyCalendar({
+	el: $$('calendar2') //触发的元素
+});
+
+//相对el位置
+var c3 = new MyCalendar({
+	el: $$('calendar3'),
+	autoSetPosition: true, //自动设置位置，一般与parent一起用
+	left: 100, //距离el left的位置，位置px
+	top: 50 //距离el top的位置，位置px
+});
+
+//默认值
+var c4 = new MyCalendar({
+	el: $$('calendar4'),
+	defaultValue: '2015-01-01', //默认值
+});
+//日期范围
+var c5 = new MyCalendar({
+	el: $$('calendar5'), //触发的元素
+	maxDate: '2026-10-12', //日期范围控制-最大日期
+	minDate: '2010-01-01', //日期范围控制-最小日期
+});
+//显示所有，显示当月
+var c6 = new MyCalendar({
+	el: $$('calendar6'),
+	showAllDate: true, //显示所有日期，包括上个月、下个月
+});
+//显示当月
+var c7 = new MyCalendar({
+	el: $$('calendar7'),
+	showAllDate: false, //显示所有日期，包括上个月、下个月
+});
+//回调
+var c8 = new MyCalendar({
+	el: $$('calendar8'),
+	callback: function(data, arg) { //回调
+		alert(data, arg);
+	}
+});
+//皮肤
+var c9 = new MyCalendar({
+	skin: 'calendar-ui', //皮肤
+	el: $$('calendar9')
+});
+</script>
 	</body>
 </html>
