@@ -2,6 +2,7 @@
 
 
 > 2016/2/29 12:15:17
+
 ## 引用 ##
 <pre>
 &lt;link rel="stylesheet" href="http://static.huizecdn.com/js/plugins/my-calendar/stylesheets/calendar.css"&gt;
@@ -32,14 +33,8 @@ var c1 = new MyCalendar({
 //c1.open(); //手动打开
 //c1.close(); //手动关闭
 </pre>
-### 预览 ###
-
-<pre>
-	function test(){
-		alert()
-	}
-</pre>
-#ad #
+ 
+# 预览 #
 
 ![](images/001.png)
 ![](images/002.png)
