@@ -119,7 +119,7 @@
 			return isNaN(result) ? 0 : result;
 		},
 		isValidDate: function(date) {
-			return date !== '' && (new Date(date) + '') !== 'Invalid Date';
+			return date && !isNaN(new Date(date).getTime());
 		}
 	};
 	//判断是否某种类型
