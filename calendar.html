@@ -13,10 +13,12 @@
 		<script src="build/shCore.js"></script>
 		<script src="build/shBrushJScript.js"></script>
 		<script type="text/javascript">
-			SyntaxHighlighter.all({
-				brush: 'js',
-				toolbar: false
-			});
+			try {
+				SyntaxHighlighter.all({
+					brush: 'js',
+					toolbar: false
+				});
+			} catch (ev) {}
 		</script>
 	</head>
 	<body class="deme-box">
@@ -55,7 +57,7 @@
 					showAllDate: true, //显示所有日期，包括上个月、下个月
 					defaultValue: '2015-01-01', //默认值
 					maxDate: '2026-10-12', //日期范围控制-最大日期
-					minDate: '2010-01-01', //日期范围控制-最小日期
+					minDate: '2010-01-01' //日期范围控制-最小日期
 				});
 				c1.open(); //手动打开
 				//c1.close(); //手动关闭
@@ -163,7 +165,7 @@ var c1 = new MyCalendar({
 	showAllDate: true, //显示所有日期，包括上个月、下个月
 	defaultValue: '2015-01-01', //默认值
 	maxDate: '2026-10-12', //日期范围控制-最大日期
-	minDate: '2010-01-01', //日期范围控制-最小日期
+	minDate: '2010-01-01' //日期范围控制-最小日期
 });
 c1.open(); //手动打开
 //c1.close(); //手动关闭
@@ -184,23 +186,23 @@ var c3 = new MyCalendar({
 //默认值
 var c4 = new MyCalendar({
 	el: $$('calendar4'),
-	defaultValue: '2015-01-01', //默认值
+	defaultValue: '2015-01-01' //默认值
 });
 //日期范围
 var c5 = new MyCalendar({
 	el: $$('calendar5'), //触发的元素
 	maxDate: '2026-10-12', //日期范围控制-最大日期
-	minDate: '2010-01-01', //日期范围控制-最小日期
+	minDate: '2010-01-01' //日期范围控制-最小日期
 });
 //显示所有，显示当月
 var c6 = new MyCalendar({
 	el: $$('calendar6'),
-	showAllDate: true, //显示所有日期，包括上个月、下个月
+	showAllDate: true //显示所有日期，包括上个月、下个月
 });
 //显示当月
 var c7 = new MyCalendar({
 	el: $$('calendar7'),
-	showAllDate: false, //显示所有日期，包括上个月、下个月
+	showAllDate: false //显示所有日期，包括上个月、下个月
 });
 //回调
 var c8 = new MyCalendar({

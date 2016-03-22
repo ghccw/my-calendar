@@ -721,14 +721,14 @@
 		events: function() {
 			var _this = this;
 			_this.el.onclick = function(ev) {
-				ev.stopPropagation();
+				_this.stopPropagation(ev);
 			};
 			_this.el.onfocus = function() {
 				_this.closeAll();
 				_this.__open();
 			};
 			_this.box.onclick = function(ev) {
-				ev.stopPropagation();
+				_this.stopPropagation(ev);
 			};
 			_this.prevMoreYear.onclick = function() {
 				_this.yearNum -= 10;
@@ -1424,8 +1424,15 @@
 	extend(fn, new KW.Kingwell());
 	extend(fn, new MyCalendarDefault());
 
-	MyCalendar.toString = function() {
-		return '日历插件';
+
+	var pro = {
+		version: '1.0.1',
+		toString: function() {
+			return '日历插件';
+		}
 	};
+	for (var key in pro) {
+		MyCalendar[key] = pro[key];
+	}
 	window.MyCalendar = MyCalendar;
 })(this);

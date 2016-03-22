@@ -88,6 +88,18 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   background-color: #fea;
 }
 
+.calendar-year-box {
+  width: 139px;
+}
+
+.calendar-month-box {
+  width: 133px;
+}
+
+.calendar-date-box {
+  width: 276px;
+}
+
 .calendar-ui,
 .calendar-ui .calendar-year-box,
 .calendar-ui .calendar-month-box,

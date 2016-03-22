@@ -124,14 +124,14 @@
 		events: function() {
 			var _this = this;
 			_this.el.onclick = function(ev) {
-				ev.stopPropagation();
+				_this.stopPropagation(ev);
 			};
 			_this.el.onfocus = function() {
 				_this.closeAll();
 				_this.__open();
 			};
 			_this.box.onclick = function(ev) {
-				ev.stopPropagation();
+				_this.stopPropagation(ev);
 			};
 			_this.prevMoreYear.onclick = function() {
 				_this.yearNum -= 10;

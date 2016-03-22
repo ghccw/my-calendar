@@ -143,7 +143,7 @@
 	.calendar-date-header {
 		text-align: center;
 		background-color: nth($color, 1);
-		padding: 10px;
+		padding: 10px 0;
 		font-size: 14px;
 		font-weight: bold;
 	}
@@ -153,7 +153,6 @@
 	.calendar-date-box,
 	.calendar-time-box {
 		zoom: 1;
-		_width: 150px;
 		float: left;
 		border-right: 1px solid $borderColor;
 		height: 250px;
