@@ -1,10 +1,10 @@
 # My Calendar V 1.0.1 #
 
 
-> 2016/2/29 12:15:17
+> 2016/5/20 10:46:03 
 
 
-## Update Log
+## Update LOG
 
 	更新日志：
 	V 0.0.1——修复最大值，最小值为Function时多次调用；DATE:2016-04-27
@@ -13,19 +13,19 @@
 	
 	V 0.0.3——1：修复目标元素附上冒泡事件；
 		   2：调整获取TOP的方式，添加动态获取，即为function 方式；
-## quote ##
+## Quote ##
 <pre>
 &lt;link rel="stylesheet" href="http://static.huizecdn.com/js/plugins/my-calendar/stylesheets/calendar.css"&gt;
 &lt;script src="http://static.huizecdn.com/js/plugins/my-calendar/build/my-calendar.min.js"&gt;&lt;/script&gt;
 </pre>
-### OR ###
+### Or ###
 <pre>
 &lt;link rel="stylesheet" href="/stylesheets/calendar.css"&gt;
 &lt;script src="/build/my-calendar.min.js"&gt;&lt;/script&gt;
 </pre>
-## DEMO ##
+## Demo ##
 <pre>
-//完整Demo
+//Demo
 var c1 = new MyCalendar({
 	skin: 'calendar-ui', //皮肤
 	autoClose: false, //自动关闭
@@ -44,7 +44,7 @@ var c1 = new MyCalendar({
 //c1.close(); //手动关闭
 </pre>
  
-# 预览 #
+# View #
 
 ![](images/001.png)
 ![](images/002.png)
