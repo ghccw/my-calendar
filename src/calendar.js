@@ -1,7 +1,7 @@
 /**
- **	LOG:
- **	V 0.0.1——修复最大值，最小值为Function时多次调用；DATE:2016-04-27
- **	V 0.0.2——最大值小于当前日期或最小值大于当前日期时，以最大值或最小值为当前时间；DATE:2016-04-27
+ **	AUTHOR : kingwell Leng;
+ **	VESRION: 0.0.3;
+ ** DATE   : 2016-05-20;
  **/
 (function(window, undefined) {
 	'use strict';
