@@ -3,6 +3,21 @@
 
 > 2016/5/20 10:46:03 
 
+	var opitions = {
+		skin: String,
+		autoClose: Boolean,
+		el: Element,
+		parent: Element,
+		readOnly: Boolean,
+		autoSetPosition: Boolean,
+		left: Number,
+		top: Number Or Function,
+		showAllDate: Boolean,
+		defaultValue: string,
+		maxDate: String Or Function,
+		minDate: String Or Function,
+	}
+	new MyCalendar(options);
 
 ## Update LOG
 
