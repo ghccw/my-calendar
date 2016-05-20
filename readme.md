@@ -4,22 +4,22 @@
 > 2016/5/20 10:46:03 
 
 	var opitions = {
-		skin: String,
-		autoClose: Boolean,
+		//skin: String,
+		//autoClose: Boolean,
 		el: Element,
-		parent: Element,
-		readOnly: Boolean,
-		autoSetPosition: Boolean,
-		left: Number,
-		top: Number Or Function,
-		showAllDate: Boolean,
-		defaultValue: string,
-		maxDate: String Or Function,
-		minDate: String Or Function,
+		//parent: Element,
+		//readOnly: Boolean,
+		//autoSetPosition: Boolean,
+		//left: Number,
+		//top: Number Or Function,
+		//showAllDate: Boolean,
+		//defaultValue: string,
+		//maxDate: String Or Function,
+		//minDate: String Or Function,
 	}
 	new MyCalendar(options);
 
-## Update LOG
+### Update Log
 
 	更新日志：
 	V 0.0.1——修复最大值，最小值为Function时多次调用；DATE:2016-04-27
@@ -28,17 +28,17 @@
 	
 	V 0.0.3——1：修复目标元素附上冒泡事件；
 		   2：调整获取TOP的方式，添加动态获取，即为function 方式；
-## Quote ##
+### Quote
 <pre>
 &lt;link rel="stylesheet" href="http://static.huizecdn.com/js/plugins/my-calendar/stylesheets/calendar.css"&gt;
 &lt;script src="http://static.huizecdn.com/js/plugins/my-calendar/build/my-calendar.min.js"&gt;&lt;/script&gt;
 </pre>
-### Or ###
+### Or 
 <pre>
 &lt;link rel="stylesheet" href="/stylesheets/calendar.css"&gt;
 &lt;script src="/build/my-calendar.min.js"&gt;&lt;/script&gt;
 </pre>
-## Demo ##
+### Demo 
 <pre>
 //Demo
 var c1 = new MyCalendar({
@@ -59,7 +59,7 @@ var c1 = new MyCalendar({
 //c1.close(); //手动关闭
 </pre>
  
-# View #
+#### View 
 
 ![](images/001.png)
 ![](images/002.png)
