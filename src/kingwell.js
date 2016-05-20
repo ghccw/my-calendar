@@ -8,8 +8,24 @@
 		isIE = /msie/.test(userAgent),
 		deepCopy = function(source) {
 			var result = {};
+			if (!source) {
+				return source
+			}
+			if (typeof source !== 'object') {
+				return source;
+			}
+			if (Object.prototype.toString.call(source).slice(8, -1) === 'Array') {
+				result = [];
+				for (var i = 0; i < source.length; i++) {
+					result[i] = deepCopy(source[i]);
+				}
+				return result;
+			}
 			for (var key in source) {
-				result[key] = typeof source[key] === 'object' ? deepCopy(source[key]) : source[key];
+				//if (source.hasOwnProperty(key)) {
+				result[key] = deepCopy(source[key]);
+				//}
+
 			}
 			return result;
 		},

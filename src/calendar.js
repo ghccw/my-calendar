@@ -1,4 +1,10 @@
+/**
+ **	LOG:
+ **	V 0.0.1——修复最大值，最小值为Function时多次调用；DATE:2016-04-27
+ **	V 0.0.2——最大值小于当前日期或最小值大于当前日期时，以最大值或最小值为当前时间；DATE:2016-04-27
+ **/
 (function(window, undefined) {
+	'use strict';
 	var fn, extend = KW.extend;
 
 	function MyCalendarDefault() {}
@@ -20,6 +26,7 @@
 		showTime: false,
 		autoSetPosition: true, //自动设置位置
 		parent: '',
+		autoOpen: true,
 		holidays: [],
 		weekText: ['日', '一', '二', '三', '四', '五', '六'],
 		headerUnit: ['年', '月', '日'],
@@ -51,10 +58,43 @@
 		if (!this.el) {
 			this.el = this.hiddenInput;
 		}
-		this.maxDate = this.compatibleDateFormat(this.maxDate);
-		this.minDate = this.compatibleDateFormat(this.minDate);
+		this.__maxDate = function() {
+			var result = '';
+			if (typeof _this.maxDate === 'string') {
+				result = _this.maxDate;
+			} else {
+				result = _this.maxDate();
+			}
+			return this.compatibleDateFormat(result);
+		};
+		this.__minDate = function() {
+			var result = '';
+			if (typeof _this.minDate === 'string') {
+				result = _this.minDate;
+			} else {
+				result = _this.minDate();
+			}
+			return this.compatibleDateFormat(result);
+		};
+		this.getTop = function() {
+			var top = this.top;
+			if (typeof this.top === 'function') {
+				top = this.top();
+			}
+			return top;
+		};
+
+		function bind(ev) {
+			//如果不是自己，则关闭
+			if (_this.getTarget(ev) !== _this.el) {
+				_this.closeAll();
+				_this.removeEvent(document, 'click', bind);
+			}
+		}
 
 		this.__open = function() {
+			_this.__max = _this.__maxDate();
+			_this.__min = _this.__minDate();
 			_this.random = this.name + '-' + new Date().getTime() + Math.round(Math.random() * 10000);
 			MyCalendar[this.random] = function() {
 				if (_this.autoClose) {
@@ -64,10 +104,11 @@
 			};
 			MyCalendar.array.push(MyCalendar[this.random]);
 			_this.open();
-			_this.addEvent(document, 'click', MyCalendar[_this.random]);
+			//_this.addEvent(document, 'click', MyCalendar[_this.random]);
+			_this.addEvent(document, 'click', bind);
 		};
 		this.init();
-
+		//this.lock = false;
 	}
 
 	MyCalendar.prototype = fn = {
@@ -88,7 +129,7 @@
 				pos = _this.getPosition(_this.el);
 			if (_this.autoSetPosition) {
 				_this.setCss(_this.box, {
-					top: pos.top + pos.height + _this.top + 'px',
+					top: pos.top + pos.height + _this.getTop() + 'px',
 					left: pos.left + _this.left + 'px',
 					'z-index': _this.zIndex
 				});
@@ -109,22 +150,40 @@
 				this.text(this.el, value);
 				date = this.compatibleDateFormat(value);
 			}
+			if (!date) {
+				var max = this.__maxDate(),
+					min = this.__minDate(),
+					getMaxDates = this.getDates(this.__maxDate()),
+					getMinDates = this.getDates(this.__minDate());
+
+				if (max && getMaxDates < 0) {
+					date = max;
+				}
+				if (min && getMinDates > 0) {
+					date = min;
+				}
+			}
 			this.DATE = this.getDate(date); /*new Date('2016-03-25');*/
 			this.Y = this.DATE.getFullYear();
 			this.M = this.DATE.getMonth();
 			this.D = this.DATE.getDate();
 		},
+		getTarget: function(ev) {
+			var e = ev || window.event;
+			var target = e.srcElement || e.target;
+			return target;
+		},
 		init: function() {
 			this.el.tabIndex = 0;
 			this.initDate();
 			this.create();
-			this.events();
+			this.__events();
 			this.addClass(this.box, this.skin);
 		},
-		events: function() {
+		__events: function() {
 			var _this = this;
 			_this.el.onclick = function(ev) {
-				_this.stopPropagation(ev);
+				//_this.stopPropagation(ev);
 			};
 			_this.el.onfocus = function() {
 				_this.closeAll();
@@ -147,6 +206,10 @@
 			};
 		},
 		open: function() {
+			if (this.lock) {
+				//return;
+			}
+			//this.lock = true;
 			this.update();
 			this.append(this.box, this.parent);
 			this.initDate();
@@ -160,6 +223,7 @@
 		},
 		close: function() {
 			var _this = this;
+			//_this.lock = false;
 			_this.remove(_this.box);
 		},
 		closeAll: function() {
@@ -185,12 +249,12 @@
 				}
 				this.updateMonth();
 				this.updateDate();
-				this.select({
+				this.__select({
 					type: 'year'
 				});
 			} else {
-				this.error.call(this, '最小年为：' + this.minDate);
-				this.initDate(this.getDate(this.minDate));
+				this.error.call(this, '最小年为：' + this.__min);
+				this.initDate(this.getDate(this.__min));
 				this.updateAll();
 			}
 		},
@@ -199,25 +263,25 @@
 				this.Y++;
 				this.DATE.setYear(this.Y);
 				this.updateAll();
-				this.select({
+				this.__select({
 					type: 'year'
 				});
 			} else {
-				this.error.call(this, '最小年为：' + this.maxDate);
-				this.initDate(this.getDate(this.maxDate));
+				this.error.call(this, '最小年为：' + this.__max);
+				this.initDate(this.getDate(this.__max));
 				this.updateAll();
 			}
 		},
 		getDateStatus: function() { //判断最小日期是否大于最大日历
 			var status = true;
-			if (this.minDate && this.maxDate) {
-				if (this.getDates(this.minDate, this.maxDate) < 0) {
+			if (this.__min && this.__max) {
+				if (this.getDates(this.__min, this.__max) < 0) {
 					status = false;
 				}
 			}
 			return status;
 		},
-		select: function() {
+		__select: function() {
 			var _this = this,
 				args = arguments[0],
 				date = this.getNewDate(this.Y, this.M, this.D),
@@ -425,8 +489,8 @@
 				status = true,
 				minStatus, maxStatus,
 				date,
-				minDate = new Date(_this.minDate),
-				maxDate = new Date(_this.maxDate);
+				minDate = new Date(_this.__min),
+				maxDate = new Date(_this.__max);
 			switch (type) {
 				case 'year':
 					minStatus = value < minDate.getFullYear();
@@ -436,27 +500,27 @@
 					date = new Date();
 					date.setYear(_this.Y);
 					date.setMonth(value);
-					if (_this.minDate) {
+					if (_this.__min) {
 						date.setDate(_this.getMaxDates(_this.Y, value));
-						minStatus = _this.getDates(_this.minDate, _this.getCurrentDate(date)) < 0;
+						minStatus = _this.getDates(_this.__min, _this.getCurrentDate(date)) < 0;
 					}
-					if (_this.maxDate) {
+					if (_this.__max) {
 						date.setDate(1);
-						maxStatus = _this.getDates(_this.maxDate, _this.getCurrentDate(date)) > 0;
+						maxStatus = _this.getDates(_this.__max, _this.getCurrentDate(date)) > 0;
 					}
 					break;
 				case 'date':
 
-					if (_this.minDate) {
-						minStatus = _this.getDates(_this.minDate, _this.getCurrentDate(value)) < 0;
+					if (_this.__min) {
+						minStatus = _this.getDates(_this.__min, _this.getCurrentDate(value)) < 0;
 					}
-					if (_this.maxDate) {
-						maxStatus = _this.getDates(_this.maxDate, _this.getCurrentDate(value)) > 0;
+					if (_this.__max) {
+						maxStatus = _this.getDates(_this.__max, _this.getCurrentDate(value)) > 0;
 					}
 					break;
 			}
 			//最小日期
-			if (_this.minDate) {
+			if (_this.__min) {
 				if (minStatus) {
 					status = false;
 				} else {
@@ -464,7 +528,7 @@
 				}
 			}
 			//最大日期
-			if (_this.maxDate) {
+			if (_this.__max) {
 				if (maxStatus) {
 					status = false;
 				} else {
@@ -472,7 +536,7 @@
 				}
 			}
 			//两个都存在
-			if (_this.minDate && _this.maxDate) {
+			if (_this.__min && _this.__max) {
 				if (minStatus || maxStatus) {
 					status = false;
 				} else {
@@ -527,7 +591,7 @@
 							});
 							_this.updateMonth();
 							_this.updateDate();
-							_this.select({
+							_this.__select({
 								type: 'year'
 							});
 						}
@@ -551,8 +615,8 @@
 			_this.monthHeader.innerHTML = _this.M + 1 + _this.headerUnit[1];
 			_this.empty(_this.monthTbody);
 			for (var m = 0; m < 12; m++) {
-				var status = true;
-				td = _this.createElement('td');
+				var status = true,
+					td = _this.createElement('td');
 				td.innerHTML = m + 1 + _this.monthUnit[0];
 				if (i % 2 === 0) {
 					tBodyTr = _this.createElement('tr');
@@ -575,7 +639,7 @@
 							_this.updateDate({
 								date: date
 							});
-							_this.select({
+							_this.__select({
 								type: 'month'
 							});
 						}
@@ -600,6 +664,7 @@
 				nowMonthDate, prevMonthDate, nextMonthDate = 1,
 				currentDate,
 				maxDateStatus = true,
+				showMonth,
 				dateObj, frg = document.createDocumentFragment();
 
 			_year = _this.Y || dateObj.getFullYear();
@@ -701,7 +766,7 @@
 								_this.updateDate({
 									date: currentDate
 								});
-								_this.select({
+								_this.__select({
 									type: 'date'
 								});
 							});
@@ -830,6 +895,13 @@
 
 	var pro = {
 		version: '1.0.1',
+		closeAll: function() {
+			var arr = MyCalendar.array || [];
+			for (var i = 0; i < arr.length; i++) {
+				arr[i]();
+			}
+			MyCalendar.array = [];
+		},
 		toString: function() {
 			return '日历插件';
 		}
