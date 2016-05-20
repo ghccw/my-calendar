@@ -3,17 +3,27 @@
 
 > 2016/2/29 12:15:17
 
-## 引用 ##
+
+## Update Log
+
+	更新日志：
+	V 0.0.1——修复最大值，最小值为Function时多次调用；DATE:2016-04-27
+	
+	V 0.0.2——最大值小于当前日期或最小值大于当前日期时，以最大值或最小值为当前时间；DATE:2016-04-27
+	
+	V 0.0.3——1：修复目标元素附上冒泡事件；
+		   2：调整获取TOP的方式，添加动态获取，即为function 方式；
+## quote ##
 <pre>
 &lt;link rel="stylesheet" href="http://static.huizecdn.com/js/plugins/my-calendar/stylesheets/calendar.css"&gt;
 &lt;script src="http://static.huizecdn.com/js/plugins/my-calendar/build/my-calendar.min.js"&gt;&lt;/script&gt;
 </pre>
-### 或 ###
+### OR ###
 <pre>
 &lt;link rel="stylesheet" href="/stylesheets/calendar.css"&gt;
 &lt;script src="/build/my-calendar.min.js"&gt;&lt;/script&gt;
 </pre>
-## 调用方法 ##
+## DEMO ##
 <pre>
 //完整Demo
 var c1 = new MyCalendar({
