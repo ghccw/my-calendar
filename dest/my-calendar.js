@@ -640,6 +640,7 @@
 		autoSetPosition: true, //自动设置位置
 		parent: '',
 		autoOpen: true,
+		scrollTime: 10,
 		holidays: [],
 		weekText: ['日', '一', '二', '三', '四', '五', '六'],
 		headerUnit: ['年', '月', '日'],
@@ -700,11 +701,25 @@
 		function bind(ev) {
 			//如果不是自己，则关闭
 			if (_this.getTarget(ev) !== _this.el) {
-				_this.closeAll();
+				// _this.closeAll();
+				_this.close(); //如果不是自己则关闭自己
 				_this.removeEvent(document, 'click', bind);
+				_this.removeEvent(window, 'scroll', resetPostion);
 			}
 		}
+		var timeout;
 
+		function resetPostion() {
+			if (!_this.scrollTime) {
+				_this.setPostion();
+			} else {
+				clearTimeout(timeout);
+				timeout = setTimeout(function() {
+					_this.setPostion();
+				}, _this.scrollTime);
+			}
+
+		}
 		this.__open = function() {
 			_this.__max = _this.__maxDate();
 			_this.__min = _this.__minDate();
@@ -719,6 +734,7 @@
 			_this.open();
 			//_this.addEvent(document, 'click', MyCalendar[_this.random]);
 			_this.addEvent(document, 'click', bind);
+			_this.addEvent(window, 'scroll', resetPostion);
 		};
 		this.init();
 		//this.lock = false;
@@ -823,9 +839,9 @@
 				//return;
 			}
 			//this.lock = true;
+			this.initDate();
 			this.update();
 			this.append(this.box, this.parent);
-			this.initDate();
 			this.setValue();
 			this.setPostion();
 			this.dateError = this.getDateStatus();
@@ -1112,6 +1128,7 @@
 				case 'month':
 					date = new Date();
 					date.setYear(_this.Y);
+					date.setDate(1);
 					date.setMonth(value);
 					if (_this.__min) {
 						date.setDate(_this.getMaxDates(_this.Y, value));
@@ -1164,6 +1181,7 @@
 		getNewDate: function(year, month, date) {
 			var _date = new Date();
 			_date.setYear(year);
+			_date.setDate(1); //先把天设置为第一天，否则当前时间为31日时，设置的月份又没有31日时，月份会加1;
 			_date.setMonth(month);
 			_date.setDate(date);
 			return _date;

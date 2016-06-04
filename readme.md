@@ -28,6 +28,8 @@
 	
 	V 0.0.3——1：修复目标元素附上冒泡事件；
 		   2：调整获取TOP的方式，添加动态获取，即为function 方式；
+	2016-06-04
+	v 0.0.4——场景：当目标在弹出层里时，添加动态计算位置 window.onscroll 计算频率通过scrollTime来设置，默认为10；
 ### Quote
 <pre>
 &lt;link rel="stylesheet" href="http://static.huizecdn.com/js/plugins/my-calendar/stylesheets/calendar.css"&gt;
