@@ -19,7 +19,7 @@
 	}
 	new MyCalendar(options);
 
-### Update Log
+### 更新日志
 
 	更新日志：
 	V 0.0.1——修复最大值，最小值为Function时多次调用；DATE:2016-04-27
@@ -30,12 +30,12 @@
 		   2：调整获取TOP的方式，添加动态获取，即为function 方式；
 	2016-06-04
 	v 0.0.4——场景：当目标在弹出层里时，添加动态计算位置 window.onscroll 计算频率通过scrollTime来设置，默认为10；
-### Quote
+### 引用
 <pre>
-&lt;link rel="stylesheet" href="http://static.huizecdn.com/js/plugins/my-calendar/stylesheets/calendar.css"&gt;
-&lt;script src="http://static.huizecdn.com/js/plugins/my-calendar/build/my-calendar.min.js"&gt;&lt;/script&gt;
+&lt;link rel="stylesheet" href="http://static.xxx.com/js/plugins/my-calendar/stylesheets/calendar.css"&gt;
+&lt;script src="http://static.xxx.com/js/plugins/my-calendar/build/my-calendar.min.js"&gt;&lt;/script&gt;
 </pre>
-### Or 
+### 或者
 <pre>
 &lt;link rel="stylesheet" href="/stylesheets/calendar.css"&gt;
 &lt;script src="/build/my-calendar.min.js"&gt;&lt;/script&gt;
